@@ -2,6 +2,9 @@ const express = require("express")
 const server = express()
 const routes = require("./routes")
 
+
+// isso é para configurar o ejs e mandar somente o html
+server.set('view engine', 'ejs')
 // ele vai jogar um arquivo para o get para rodad que nesse caso é liberar os arquivos estaticos. A outra função é dizer que os arquivos estaticos estão na pasta "public" 
 server.use(express.static("public"))
 
