@@ -5,8 +5,13 @@ const routes = require("./routes")
 
 // isso é para configurar o ejs e mandar somente o html
 server.set('view engine', 'ejs')
-// ele vai jogar um arquivo para o get para rodad que nesse caso é liberar os arquivos estaticos. A outra função é dizer que os arquivos estaticos estão na pasta "public" 
+// ele vai jogar um arquivo para o get para rodar que nesse caso é liberar os arquivos estaticos. A outra função é dizer que os arquivos estaticos estão na pasta "public" 
 server.use(express.static("public"))
+
+// usar o req.body
+//use serve para iniciaralguma coisa
+server.use(express.urlencoded({ extended: true }))
+// req.body sendo habilitado
 
 server.use(routes)
 server.listen(3000, ()=> console.log('rodando'))

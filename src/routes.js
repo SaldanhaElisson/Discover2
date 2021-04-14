@@ -26,6 +26,12 @@ routes.get('/job', (req, res) => res.render(views + "job")
     // VAMOS TROOCAR O "SENDfILE" PARA "RENDER" POIS O EJS AGORA VAI REDENRIZRA O HTML QUE ESTÁ JUNTO COM JS E VAI MANDAR PARA O SERVIDOR
     //redireciona para um local
 )
+routes.post('/job', (req, res) => {
+    console.log(req.body)
+    // aqui estamos dizendo que temos um metodo post no job perto do form, criando a rota
+})
+   
+
 routes.get('/job/edit', (req, res) => res.render(views + "job-edit")                                                          
     //redireciona para um local
 )
