@@ -10,53 +10,63 @@ const profile ={
     "monthly-budget":3000,
     "days-per-week": 5,
     "hours-per-day": 5,
-    "vacation-per-year": 4
+    "vacation-per-year": 4,
+    "value-hour": 75,
 
 
 }
 // estrutura de dados
 const jobs = [
     {
-        id: 1,
-        name: "Pizzaria Guloso",
-        "daily-hours": 2,
-        "total-hours": 60,
-        created_at: Date.now()
-
-    },
-    {
-    id: 2,
-    name: "OneTwo Project",
-    "daily-hours": 3,
-    "total-hours": 47,
-    created_at: Date.now()
-}
+        id:2,
+        name:" One two",
+        "daily-hours": 3,
+        "total-hours": 47,
+        created_at: Date.now(),
+    }
 ]
 
-//request, response
-routes.get('/', (req, res) => {
-
-    const updateJobs = jobs.map((job) => {
-
-         // settings on job 
+function remainingDays(job) {
+      // settings on job 
         // calcule of remaining timer
         const remainingDays = (job["total-hours"] / job["daily-hours"]).toFixed()
 
         const createdDate = new Date(job.created_at)
         // new equality function buildly
-        const dueDay = createdDate.getDate() + Number(remainingDays)
-        // const dueDate = createdDate.setDate
+        // date when was created the project
 
-        return job
+        const dueDay = createdDate.getDate() + Number(remainingDays)
+        const dueDateInMs = createdDate.setDate(dueDay)
+
+        const timeDiffInMs = dueDateInMs - Date.now()
+        // calculete a differ of due Data with date now
+
+        //become milli in day
+        const dayInMs = 1000 * 60 * 60 * 24 
+        const dayDiff = (timeDiffInMs / dayInMs).toFixed()
+
+        return dayDiff
+}
+
+//request, response
+routes.get('/', (req, res) => {
+    // ajustes no job
+    const updateJobs = jobs.map((job) => {
+        const remainig = remainingDays(job)
+        const status = remainig <= 0 ? 'done': 'progress'
+        
+        return {
+            ...job,
+            remainig,
+            status,
+            budget: profile["value-hour"] * job["total-hours"]
+        }
     })
 
    
-
-
-
-    return res.render(views + "index", {jobs})
-    // sendFile __ vai ser o caminho absuloto mas as pastas precisam está dentro do src para enviar o html para o servidor, nessa é a pasta vies 
-}) // AQUI O SERVER TEM UM METODO CHAMADO GET QUE VAI RODA QUANDO EU DIGITAR NO FINAL DA URL O '/' DEPOIS QUE ELE PERCEBER QUE RECEBEU O '/' ELE VAI EXECUTAR A ARROW FUNCTION QUE NESE CASO TEM COMO ARGUMENTOS O PEDIDO E A RESPOSTA, DEPOIS PRECISAMOS FAZER UM RETURN UTILIZANDO O OBJETO RETURN COM UM METODO 'RESPONSE.SENd' E VAMOS COLOCA NO PARAMETÔ A RESPOSTA DO PEDIDO.
+    return res.render(views + "index", {jobs: updateJobs})
+    // sendFile __ vai ser o caminho absuloto mas as pastas precisam está dentro do src para enviar o html para o servidor, nessa é a pasta views 
+}) // AQUI O SERVER TEM UM METODO CHAMADO GET QUE VAI RODA QUANDO EU DIGITAR NO FINAL DA URL O '/' DEPOIS QUE ELE PERCEBER QUE RECEBEU O '/' ELE VAI EXECUTAR A ARROW FUNCTION QUE NESE CASO TEM COMO ARGUMENTOS O PEDIDO E A RESPOSTA, DEPOIS PRECISAMOS FAZER UM RETURN UTILIZANDO O OBJETO RETURN COM UM METODO 'RESPONSE.RENDER' E VAMOS COLOCA NO PARAMETÔ A RESPOSTA DO PEDIDO.
 
 
 routes.get('/job', (req, res) => res.render(views + "job")
@@ -65,9 +75,9 @@ routes.get('/job', (req, res) => res.render(views + "job")
 )
 routes.post('/job', (req, res) => {
     
-    const lastId = jobs[job.length - 1]?.id || 1;
+    const lastId = jobs[jobs.length - 1]?.id || 1;
     // search last id
-    // the point interrogation and || to use to if or else
+    // the point interrogation and || to use like if or else
     
     jobs.push({
         id: lastId + 1,
