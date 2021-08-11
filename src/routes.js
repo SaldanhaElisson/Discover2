@@ -55,7 +55,7 @@ const Job = {
             id: 2,
             name: " One two",
             "daily-hours": 3,
-            "total-hours": 1,
+            "total-hours": 2,
             created_at: Date.now(),
         }
     ],
@@ -70,7 +70,7 @@ const Job = {
                     ...job,
                     remainig,
                     status,
-                    budget: profile.data["value-hour"] * job["total-hours"]
+                    budget: Job.services.calculateBudget(job, profile.data["value-hour"])
                 }
             })
 
@@ -95,6 +95,20 @@ const Job = {
             })
             return res.redirect('/')
 
+        },
+        show(req, res){
+            const jobId = req.params.id
+        
+            const job = Job.data.find(job => job.id == jobId) // vai verificar em cada array e quando o valor job.id for igual ao jobiD ele vai retorna o valor
+            console.log(job)
+            
+            job.budget = Job.services.calculateBudget(job, profile.data["value-hour"])
+            
+            if(!job){
+                return res.send('Job not found')
+            }
+
+            return res.render(views + "job-edit", {job})
         }
     },
     services: {
@@ -118,7 +132,9 @@ const Job = {
             const dayDiff = (timeDiffInMs / dayInMs).toFixed()
 
             return dayDiff
-        }
+        },
+
+        calculateBudget: (job, valueHour) =>   valueHour * job["total-hours"]
 
     }
 }
@@ -141,7 +157,7 @@ routes.post('/job', Job.controllers.save
 )
 
 
-routes.get('/job/edit', (req, res) => res.render(views + "job-edit")
+routes.get('/job/:id', Job.controllers.show
     //redireciona para um local
 )
 routes.get('/profile', profile.controllers.index) 
