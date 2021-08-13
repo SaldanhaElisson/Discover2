@@ -23,7 +23,7 @@
       rel="stylesheet"
     />
 
-    <script type="module" src="/scripts/job-edit.js"></script>
+    
     
   </head>
   <body id="page-job-edit">
@@ -31,7 +31,7 @@
 
 
     <div class="container flex animate-up delay-2">
-        <form id="form-job">
+        <form id="form-job" method = "post" action="/job/ <%= job.id%>">
           <fieldset>
             <legend>Dados do Job</legend>
             <div class="separator light"></div>
@@ -117,10 +117,13 @@
       </div>
       <form 
         method="post" 
-        action="/job/delete/{JOBID}" 
-        id="delete-job"></form>
+        action="/job/delete/<%= job.id %>" 
+        id="delete-job">
+       </form>
     </div>
     <!-- end modal-wrapper -->
+    
   </body>
+  <script type="module" src="/scripts/job-edit.js" ></script>
 </html>
  
