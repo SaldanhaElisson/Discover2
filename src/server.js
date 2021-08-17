@@ -1,11 +1,19 @@
 const express = require("express")
 const server = express()
 const routes = require("./routes")
+const path = require("path")
+const { setPriority } = require("os")
 
 
 // isso é para configurar o ejs e mandar somente o html
 server.set('view engine', 'ejs')
 // ele vai jogar um arquivo para o get para rodar que nesse caso é liberar os arquivos estaticos. A outra função é dizer que os arquivos estaticos estão na pasta "public" 
+
+// mudar a localização da pasta views
+server.set('views', path.join(__dirname, 'views'))
+
+
+
 server.use(express.static("public"))
 
 // usar o req.body
